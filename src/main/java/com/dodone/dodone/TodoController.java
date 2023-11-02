@@ -2,11 +2,13 @@ package com.dodone.dodone;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.function.LongToDoubleFunction;
 
+@CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -26,7 +28,20 @@ public class TodoController {
 
     @PostMapping("")
     public int addTodo(@RequestBody List<Todo> todos) {
-        return todoRepository.saveTodo(todos);
+        return todoRepository.saveManyTodo(todos);
+    }
+
+    @PostMapping("/single")
+    public ResponseEntity<Todo> addTodo(@RequestBody Todo todo) {
+        int generatedID = todoRepository.saveTodo(todo);
+
+        if(generatedID>0) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED).body(todo);
+        } else {
+            return  ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -37,6 +52,8 @@ public class TodoController {
             // 2. We set the new values from a query
             todo.setName(updatedTodo.getName());
             todo.setRating(updatedTodo.getRating());
+            todo.setPriority(updatedTodo.isPriority());
+            todo.setDone(updatedTodo.isDone());
             // 3. We update todos
             todoRepository.update(todo);
 
@@ -46,6 +63,7 @@ public class TodoController {
             return -1;
         }
     }
+
 
     @PatchMapping("/{id}")
     public int partUpdate(@PathVariable("id") int id, @RequestBody Todo updatedTodo) {
@@ -59,6 +77,10 @@ public class TodoController {
             if (updatedTodo.getRating() > 0) {
                 todo.setRating(updatedTodo.getRating());
             }
+
+            // TODO: CHECK ITS BEHAVIOUR
+            todo.setPriority(updatedTodo.isPriority());
+            todo.setDone(updatedTodo.isDone());
 
             todoRepository.update(todo);
             return 1;

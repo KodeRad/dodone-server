@@ -8,36 +8,43 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+// TODO: INTERFACE EXTENDS
 @Repository
 public class TodoRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    // TODO: CHECK WHAT BEANPROPERTY DOES
     public List<Todo> getAll() {
-        return jdbcTemplate.query("SELECT id, name, rating FROM todo",
+        return jdbcTemplate.query("SELECT * FROM todo",
                 BeanPropertyRowMapper.newInstance(Todo.class));
     }
 
     public Todo getById(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, name, rating FROM todo " +
+        return jdbcTemplate.queryForObject("SELECT * FROM todo " +
                 "WHERE id = ?", BeanPropertyRowMapper.newInstance(Todo.class), id);
     }
 
 
-    // TODO: change it from list to a single json object
-    public int saveTodo(List<Todo> todos) {
+    public int saveTodo(Todo todo) {
+        jdbcTemplate.update("INSERT INTO todo(id, name,rating, priority, done) VALUES (?,?,?,?,?)",
+                todo.getId(), todo.getName(), todo.getRating(), todo.isPriority(), todo.isDone());
+        return 1;
+    }
+
+    public int saveManyTodo(List<Todo> todos) {
 
         todos.forEach(todo ->
-                jdbcTemplate.update("INSERT INTO  todo(name, rating) VALUES (?, ?)",
-                        todo.getName(), todo.getRating()));
+                jdbcTemplate.update("INSERT INTO  todo(name, rating, priority, done) VALUES (?,?,?,?)",
+                        todo.getName(), todo.getRating(), todo.isPriority(), todo.isDone()));
 
-        return 0;
+        return 1;
     }
 
     public int update(Todo todo) {
-        return jdbcTemplate.update("UPDATE todo SET name=?, rating=? WHERE id=?",
-                todo.getName(), todo.getRating(), todo.getId());
+        return jdbcTemplate.update("UPDATE todo SET name=?, rating=?, priority=?, done=? WHERE id=?",
+                todo.getName(), todo.getRating(), todo.isPriority(), todo.isDone(), todo.getId());
     }
 
     public int delete(int id) {
