@@ -1,79 +1,82 @@
 package com.dodone.dodone;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
 
-    @Autowired
-    TodoRepository todoRepository;
 
-
-    private  TodoExampleRepository todoExampleRepository;
+    private final TodoService todoService;
+    private final TodoRepository
+            todoRepository;
 
     @GetMapping("")
     public List<Todo> getAll() {
-        return todoRepository.getAll();
+        return todoService.getTodos();
     }
 
     @GetMapping("/{id}")
-    public Todo getTodo(@PathVariable("id") int id) {
-        return todoRepository.getById(id);
+    public Todo getTodo(@PathVariable("id") Long id) {
+        return todoService.getByID(id);
     }
 
-    @PostMapping("")
-    public int addTodo(@RequestBody List<Todo> todos) {
-        todoExampleRepository.
-        return todoRepository.saveManyTodo(todos);
-    }
+    @PostMapping("/add")
+    public ResponseEntity<Todo>
+    addTodo(@RequestBody Todo todo) {
+        Todo savedTodo = todoService.save(todo);
 
-    @PostMapping("/single")
-    public ResponseEntity<Todo> addTodo(@RequestBody Todo todo) {
-        int generatedID = todoRepository.saveTodo(todo);
-
-        if(generatedID>0) {
+        if (savedTodo != null && savedTodo.getId() != null) {
             return ResponseEntity
-                    .status(HttpStatus.CREATED).body(todo);
+                    .status(HttpStatus
+                            .CREATED).body(todo);
         } else {
-            return  ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus
+                            .INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping("/{id}")
-    public int update(@PathVariable("id") int id, @RequestBody Todo updatedTodo) {
+    public ResponseEntity<Todo>
+    update(@PathVariable("id") Long id,
+           @RequestBody Todo updatedTodo) {
         // 1. We take the movie from our repository
-        Todo todo = todoRepository.getById(id);
-        if (todo != null) {
+        Todo todo = todoService.getByID(id);
+
+        if (todo != null && todo.getId() != null) {
             // 2. We set the new values from a query
             todo.setName(updatedTodo.getName());
             todo.setRating(updatedTodo.getRating());
             todo.setPriority(updatedTodo.isPriority());
             todo.setDone(updatedTodo.isDone());
             // 3. We update todos
-            todoRepository.update(todo);
+            todoService.save(todo);
 
-            return 1;
+            return ResponseEntity.status(HttpStatus.
+                    CREATED).body(todo);
         } else {
-            // TODO: Add error codes
-            return -1;
+            return ResponseEntity.status(HttpStatus.
+                    INTERNAL_SERVER_ERROR).build();
         }
     }
 
-
     @PatchMapping("/{id}")
-    public int partUpdate(@PathVariable("id") int id, @RequestBody Todo updatedTodo) {
-        Todo todo = todoRepository.getById(id);
+    public ResponseEntity<Todo>
+    partUpdate(@PathVariable("id") Long id,
+               @RequestBody Todo updatedTodo) {
 
-        if (todo != null) {
+        Todo todo = todoService.getByID(id);
+
+        if (todo != null && todo.getId() != null) {
             if (updatedTodo.getName() != null) {
                 todo.setName(updatedTodo.getName());
             }
@@ -82,20 +85,22 @@ public class TodoController {
                 todo.setRating(updatedTodo.getRating());
             }
 
-            // TODO: CHECK ITS BEHAVIOUR
             todo.setPriority(updatedTodo.isPriority());
             todo.setDone(updatedTodo.isDone());
 
-            todoRepository.update(todo);
-            return 1;
+            todoService.save(todo);
+
+            return ResponseEntity.status(HttpStatus
+                    .CREATED).body(todo);
         } else {
-            return -1;
+            return ResponseEntity.status(HttpStatus
+                    .INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public int delete(@PathVariable int id) {
-        todoRepository.delete(id);
+    public int delete(@PathVariable Long id) {
+        todoService.delete(id);
         return 1;
     }
 }

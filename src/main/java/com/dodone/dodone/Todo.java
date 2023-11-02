@@ -1,23 +1,26 @@
 package com.dodone.dodone;
 
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-
-// Git key as a password for pushing
-// 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
-
-
-@Data
-@AllArgsConstructor
+@Entity
 @NoArgsConstructor
+@Data
 public class Todo {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy =  GenerationType.AUTO)
+    private Long id;
     private String name;
     private int rating;
     private boolean priority;
     private boolean done;
+
+
+
 
 }
