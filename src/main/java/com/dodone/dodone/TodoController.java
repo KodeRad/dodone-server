@@ -16,6 +16,9 @@ public class TodoController {
     @Autowired
     TodoRepository todoRepository;
 
+
+    private  TodoExampleRepository todoExampleRepository;
+
     @GetMapping("")
     public List<Todo> getAll() {
         return todoRepository.getAll();
@@ -28,6 +31,7 @@ public class TodoController {
 
     @PostMapping("")
     public int addTodo(@RequestBody List<Todo> todos) {
+        todoExampleRepository.
         return todoRepository.saveManyTodo(todos);
     }
 
