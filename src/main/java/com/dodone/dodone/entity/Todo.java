@@ -1,4 +1,4 @@
-package com.dodone.dodone;
+package com.dodone.dodone.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,8 +19,4 @@ public class Todo {
     private int rating;
     private boolean priority;
     private boolean done;
-
-
-
-
 }

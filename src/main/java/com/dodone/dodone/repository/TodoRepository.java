@@ -1,5 +1,6 @@
-package com.dodone.dodone;
+package com.dodone.dodone.repository;
 
+import com.dodone.dodone.entity.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

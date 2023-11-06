@@ -1,10 +1,13 @@
-package com.dodone.dodone;
+package com.dodone.dodone.controller;
 
-// The bean 'todoRepository', defined in com.dodone.dodone.TodoRepository defined in @EnableJpaRepositories
+// The bean 'todoRepository', defined in repository.TodoRepository defined in @EnableJpaRepositories
 // declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration, could not be registered.
 // A bean with that name has already been defined in file [/Users/konrad.krasocki/Documents/IntelliJ
 // Projects/dodone/target/classes/com/dodone/dodone/Old/TodoRepository.class] and overriding is disabled.
 
+import com.dodone.dodone.entity.Todo;
+import com.dodone.dodone.repository.TodoRepository;
+import com.dodone.dodone.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,22 +42,15 @@ public class TodoController {
     addTodo(@RequestBody Todo todo) {
         Todo savedTodo = todoService.save(todo);
 
-        try {
-            if (savedTodo != null && savedTodo.getId() != null) {
-                return ResponseEntity
-                        .status(HttpStatus
-                                .CREATED).body(savedTodo);
-            } else {
-                return ResponseEntity
-                        .status(HttpStatus
-                                .INTERNAL_SERVER_ERROR).body(null);
-            }
 
-        } catch (Exception e) {
-            String errorMessage = e.getMessage(); // Get the error message
+        if (savedTodo != null && savedTodo.getId() != null) {
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(errorMessage); // Return the error message in the response body
+                    .status(HttpStatus
+                            .CREATED).body(savedTodo);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus
+                            .INTERNAL_SERVER_ERROR).body(null);
         }
 
 
