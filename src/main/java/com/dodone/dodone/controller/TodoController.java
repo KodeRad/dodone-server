@@ -1,23 +1,34 @@
 package com.dodone.dodone.controller;
 
 import com.dodone.dodone.entity.Todo;
+import com.dodone.dodone.service.EmailService;
 import com.dodone.dodone.service.TodoService;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
     private final TodoService todoService;
+    private final EmailService emailService;
+    private final int sec = 1000;
+
+    @Scheduled(fixedDelay = sec)
+    public void sendEmailSpecificTime() throws MessagingException {
+        todoService.sendEmail();
+    }
 
 
     @GetMapping("")
-    public List<Todo> getAll() {
+    public List<Todo> getAll() throws MessagingException {
         return todoService.getTodos();
     }
 

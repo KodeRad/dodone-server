@@ -18,8 +18,8 @@ public class Todo {
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Long id;
     private String name;
-    private Date dueDate;
-    private Date createdDate;
+    private String dueDate;
+    private String createdDate;
     private boolean priority;
     private boolean done;
 }
