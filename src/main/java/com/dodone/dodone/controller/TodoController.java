@@ -1,12 +1,6 @@
 package com.dodone.dodone.controller;
 
-// The bean 'todoRepository', defined in repository.TodoRepository defined in @EnableJpaRepositories
-// declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration, could not be registered.
-// A bean with that name has already been defined in file [/Users/konrad.krasocki/Documents/IntelliJ
-// Projects/dodone/target/classes/com/dodone/dodone/Old/TodoRepository.class] and overriding is disabled.
-
 import com.dodone.dodone.entity.Todo;
-import com.dodone.dodone.repository.TodoRepository;
 import com.dodone.dodone.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,18 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-// TODO: CONTROLLER ADVICE how to handle global exceptions spring boot
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-
-
     private final TodoService todoService;
-    private final TodoRepository
-            todoRepository;
+
 
     @GetMapping("")
     public List<Todo> getAll() {
@@ -37,10 +26,13 @@ public class TodoController {
         return todoService.getByID(id);
     }
 
+    // POST ADD
     @PostMapping("/add")
     public ResponseEntity<Todo>
     addTodo(@RequestBody Todo todo) {
+        System.out.println(todo);
         Todo savedTodo = todoService.save(todo);
+        System.out.println(savedTodo);
 
 
         if (savedTodo != null && savedTodo.getId() != null) {
@@ -52,10 +44,9 @@ public class TodoController {
                     .status(HttpStatus
                             .INTERNAL_SERVER_ERROR).body(null);
         }
-
-
     }
 
+    // PUT REPLACE
     @PutMapping("/{id}")
     public ResponseEntity<Todo>
     update(@PathVariable("id") Long id,
@@ -66,7 +57,8 @@ public class TodoController {
         if (todo != null && todo.getId() != null) {
             // 2. We set the new values from a query
             todo.setName(updatedTodo.getName());
-            todo.setRating(updatedTodo.getRating());
+            todo.setCreatedDate(updatedTodo.getCreatedDate());
+            todo.setDueDate(updatedTodo.getDueDate());
             todo.setPriority(updatedTodo.isPriority());
             todo.setDone(updatedTodo.isDone());
             // 3. We update todos
@@ -80,6 +72,8 @@ public class TodoController {
         }
     }
 
+
+    // PATCH
     @PatchMapping("/{id}")
     public ResponseEntity<Todo>
     partUpdate(@PathVariable("id") Long id,
@@ -92,8 +86,12 @@ public class TodoController {
                 todo.setName(updatedTodo.getName());
             }
 
-            if (updatedTodo.getRating() > 0) {
-                todo.setRating(updatedTodo.getRating());
+            if (updatedTodo.getDueDate() != null) {
+                todo.setDueDate(updatedTodo.getDueDate());
+            }
+
+            if (updatedTodo.getCreatedDate() != null) {
+                todo.setCreatedDate(updatedTodo.getCreatedDate());
             }
 
             todo.setPriority(updatedTodo.isPriority());

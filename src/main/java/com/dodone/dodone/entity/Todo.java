@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -16,7 +18,8 @@ public class Todo {
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Long id;
     private String name;
-    private int rating;
+    private Date dueDate;
+    private Date createdDate;
     private boolean priority;
     private boolean done;
 }

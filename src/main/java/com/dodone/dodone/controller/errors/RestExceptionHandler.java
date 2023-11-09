@@ -38,6 +38,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND,
                 "No such element found", LocalDateTime.now() );
 
-        return new ResponseEntity<ErrorResponse>(response, response.getStatus());
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }
