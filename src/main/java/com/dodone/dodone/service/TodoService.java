@@ -41,11 +41,11 @@ public class TodoService {
 
     public void sendEmail() throws MessagingException {
 //        Date timeNow = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DDTHH:mm:ss");
 //        String formattedDate = sdf.format(timeNow);
 //
 
-
+// DESIRED PATTERN / YYYY-MM-DDTHH:mm:ss
 
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 //        String formattedDateTime = timeNow.format(formatter);
@@ -56,7 +56,7 @@ public class TodoService {
         for (Todo todo : todos) {
             // ??
             String time = sdf.format(todo.getDueDate());
-            if (todo.getDueDate() != null && time.equals("Jajo")) {
+            if (todo.getDueDate() != null && time.equals("formattedDate")) {
                 EmailService.sendMail("konrad.krasocki@smartbear.com");
             }
         }
