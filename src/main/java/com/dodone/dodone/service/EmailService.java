@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    public static void sendMail(String recipient) throws MessagingException {
+    public static void sendMail(String recipient, String todoName) throws MessagingException {
         System.out.println("Preparing the send an email");
         Properties properties = new Properties();
 
@@ -35,20 +35,20 @@ public class EmailService {
         });
 
         // TODO: CHECK IMPORT(S)
-        Message message = prepareMessage(session, myAccEmail, recipient);
+        Message message = prepareMessage(session, myAccEmail, recipient, todoName);
 
         Transport.send(message);
         System.out.println("Message sent successfully");
 
     }
 
-    private static Message prepareMessage(Session session, String myAccEmail, String recipient) {
+    private static Message prepareMessage(Session session, String myAccEmail, String recipient, String todoName) {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("These are the task you have for today.");
-            message.setText("Hello there \n Lorem ipsum Task Task Task \n \n Best Regards \n DoDone Team");
+            message.setText("Hello there \n Lorem ipsum Task Task Task \n \n Best Regards \n DoDone Team" + todoName);
             return message;
         } catch (Exception e) {
             throw new RuntimeException(e);

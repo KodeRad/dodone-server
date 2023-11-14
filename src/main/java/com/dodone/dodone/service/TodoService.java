@@ -40,32 +40,25 @@ public class TodoService {
     }
 
     public void sendEmail() throws MessagingException {
-//        Date timeNow = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DDTHH:mm:ss");
-//        String formattedDate = sdf.format(timeNow);
-//
 
-// DESIRED PATTERN / YYYY-MM-DDTHH:mm:ss
-
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-//        String formattedDateTime = timeNow.format(formatter);
+        Date timeNow = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = sdf.format(timeNow);
 //        System.out.println(formattedDate);
-
+        // DESIRED PATTERN FROM FRONTEND / YYYY-MM-DD HH:mm:ss
 
         List<Todo> todos = todoRepository.findAll();
         for (Todo todo : todos) {
-            // ??
-            String time = sdf.format(todo.getDueDate());
-            if (todo.getDueDate() != null && time.equals("formattedDate")) {
-                EmailService.sendMail("konrad.krasocki@smartbear.com");
+            String time = todo.getDueDate();
+//            System.out.println(time);
+
+
+            // TODO: AN HOUR BEFORE
+            if (todo.getDueDate() != null && time.equals(formattedDate)) {
+                // TODO: PASS PROPS TO THE .sendMail METHOD TO GET THIS PARTICULAR TODO
+                EmailService.sendMail("konrad.krasocki@smartbear.com", todo.getName());
             }
         }
-
-        // JAVA TERMINAL
-        // 2023-11-09T14:31:00.457+01:00
-
-        // DUEDATE from JS
-        // 2023-11-09T14:31:00.000Z
     }
 
 }
