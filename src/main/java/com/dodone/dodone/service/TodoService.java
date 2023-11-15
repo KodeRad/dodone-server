@@ -19,7 +19,8 @@ public class TodoService {
         return todoRepository.findAll();
     }
     public Todo getByID(Long id) {
-        return todoRepository.findById(id).orElseThrow(ExceptionNoSuchElement::new);
+        return todoRepository.
+                findById(id).orElseThrow(ExceptionNoSuchElement::new);
     }
     public Todo save(Todo todo) {
         return todoRepository.save(todo);
