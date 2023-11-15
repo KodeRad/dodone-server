@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 import com.dodone.dodone.repository.TodoRepository;
 
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -44,20 +43,34 @@ public class TodoService {
         Date timeNow = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(timeNow);
-//        System.out.println(formattedDate);
-        // DESIRED PATTERN FROM FRONTEND / YYYY-MM-DD HH:mm:ss
 
         List<Todo> todos = todoRepository.findAll();
         for (Todo todo : todos) {
-            String time = todo.getDueDate();
-//            System.out.println(time);
+
+            if (!todo.getDueDate().isEmpty() ) {
+
+                String time = todo.getDueDate();
+                LocalDateTime originalDateTime = LocalDateTime.parse(time,
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                // Subtract one hour
+                LocalDateTime oneHourBefore = originalDateTime.minusHours(1);
+
+                // Format the result
+                String formattedResult = oneHourBefore.format(DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd HH:mm:ss"));
 
 
-            // TODO: AN HOUR BEFORE
-            if (todo.getDueDate() != null && time.equals(formattedDate)) {
-                // TODO: PASS PROPS TO THE .sendMail METHOD TO GET THIS PARTICULAR TODO
-                EmailService.sendMail("konrad.krasocki@smartbear.com", todo.getName());
+                if (todo.getDueDate() != null && formattedResult.equals(formattedDate)) {
+                    EmailService.sendMail("konrad.krasocki@smartbear.com", todo);
+                }
+
+
+
             }
+
+
+
         }
     }
 
