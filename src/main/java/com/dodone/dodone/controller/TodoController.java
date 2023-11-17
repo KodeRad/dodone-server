@@ -67,6 +67,8 @@ public class TodoController {
         // 1. We take the movie from our repository
         Todo todo = todoService.getByID(id);
 
+
+        // TODO: MOVE TO LOGIC TO THE CONTROLLER
         if (todo != null && todo.getId() != null) {
             // 2. We set the new values from a query
             todo.setName(updatedTodo.getName());

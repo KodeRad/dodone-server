@@ -25,7 +25,7 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Todo getByID(Long id) {
+    public Todo getByID(Long id)  {
         return todoRepository.findById(id).
                 orElseThrow(ExceptionNoSuchElement::new);
     }
@@ -65,18 +65,10 @@ public class TodoService {
                 String formattedResult = oneHourBefore.format(DateTimeFormatter
                         .ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-
                 if (todo.getDueDate() != null && formattedResult.equals(formattedDate)) {
                     EmailService.sendMail("konrad.krasocki@smartbear.com", todo);
                 }
-
-
-
             }
-
-
-
         }
     }
-
 }

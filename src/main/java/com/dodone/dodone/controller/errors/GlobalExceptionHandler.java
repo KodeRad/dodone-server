@@ -7,15 +7,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 @RestController
 @ControllerAdvice()
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Handles specific exceptions thrown by the controller
     // 1. Choose exception to handle (SQLIntegrityConstraintViolationException)
-    @ExceptionHandler(ExceptionSQLIntegrityConstraintViolationException.class)
+    @ExceptionHandler(ExceptionSQLIntegrityConstraintViolation.class)
     // 2. Create method signature which returns response entity (params not required)
 
     public ResponseEntity<ErrorResponse> handleSqlIntegrityException
@@ -23,14 +24,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         // 3. Create error response that is returns when error occur
         ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND,
-                "Attempt to insert or update data " +
-                        "in a database violates database's defined integrity constraint.",
+                "Attempt to insert or update datain a database " +
+                        "violates database's defined integrity constraint.",
                 LocalDateTime.now());
 
         // 4. Return ResponseEntity with response params
         return new ResponseEntity<>(response, response.getStatus());
     }
-
 
     @ExceptionHandler(value = ExceptionNoSuchElement.class)
     public ResponseEntity<ErrorResponse> handleNoSuchElementException
@@ -38,6 +38,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND,
                 "No such element found", LocalDateTime.now() );
 
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(value = IOException.class)
+    public ResponseEntity<ErrorResponse> handleIOException
+    () {
+        ErrorResponse response = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error reading the file.",
+                LocalDateTime.now());
+        return new ResponseEntity<>(response, response.getStatus());
+
+    } @ExceptionHandler(value = ParseException.class)
+    public ResponseEntity<ErrorResponse> handleParserException
+    () {
+        ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST,
+                "Error parsing iCalendar file",
+                LocalDateTime.now());
         return new ResponseEntity<>(response, response.getStatus());
     }
 }
