@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -21,6 +22,7 @@ public class TodoController {
     private final EmailService emailService;
     private final int sec = 1000;
 
+    //TODO: CHANGE IT TO MINUTES AND IMPLEMENT FLAGS (ASK GOSIA)
     @Scheduled(fixedDelay = sec)
     public void sendEmailSpecificTime() throws MessagingException {
         todoService.sendEmail();
@@ -119,8 +121,8 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public int delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         todoService.delete(id);
-        return 1;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

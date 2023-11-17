@@ -50,7 +50,8 @@ public class EmailService {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("Urgent Reminder: Your Task is Due in 1 Hour!");
             // TODO: EXTRACT TO OTHER FILE (multiline string), java mustache
-            message.setText("Hello there!" +
+            message.setText(
+                    "Hello there!" +
                     " \n" +
                     "Hope you're having a great day! This is a friendly reminder that you have an important" +
                     " \n" +

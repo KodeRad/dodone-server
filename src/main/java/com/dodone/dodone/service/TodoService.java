@@ -35,6 +35,11 @@ public class TodoService {
     }
 
     public void delete(Long id) {
+
+        // EXTRA QUERY FOR THROWING AN ERROR
+        todoRepository.findById(id).
+                orElseThrow(ExceptionNoSuchElement::new);
+
         todoRepository.deleteById(id);
     }
 
