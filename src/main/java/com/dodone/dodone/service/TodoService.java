@@ -3,23 +3,29 @@ package com.dodone.dodone.service;
 import com.dodone.dodone.controller.errors.ExceptionNoSuchElement;
 import com.dodone.dodone.entity.Todo;
 import jakarta.mail.MessagingException;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.dodone.dodone.repository.TodoRepository;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
 public class TodoService {
 
+
+    @Value("${EMAIL_ADDRESS}")
+    private String emailAddress;
+
     private final TodoRepository
             todoRepository;
+
+    public TodoService(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+    }
 
     public List<Todo> getTodos() {
         return todoRepository.findAll();
@@ -66,7 +72,7 @@ public class TodoService {
                         .ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                 if (todo.getDueDate() != null && formattedResult.equals(formattedDate)) {
-                    EmailService.sendMail("konrad.krasocki@smartbear.com", todo);
+                    EmailService.sendMail(emailAddress, todo);
                 }
             }
         }
