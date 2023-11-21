@@ -2,17 +2,12 @@ package com.dodone.dodone.service;
 
 import com.dodone.dodone.controller.errors.ExceptionNoSuchElement;
 import com.dodone.dodone.entity.Todo;
-import jakarta.mail.MessagingException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.dodone.dodone.repository.TodoRepository;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
+// TODO: QUERY OBJECTS
 @Service
 public class TodoService {
 

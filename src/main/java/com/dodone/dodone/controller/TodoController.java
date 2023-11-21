@@ -25,6 +25,7 @@ public class TodoController {
     private final int sec = 1000;
 
     //TODO: CHANGE IT TO MINUTES AND IMPLEMENT FLAGS (ASK GOSIA)
+    //TODO: IT SHOULD GO SOMEWHERE ELSE (OTHER SERVICE) in other process
     @Scheduled(fixedDelay = sec)
     public void sendEmailSpecificTime() throws MessagingException {
         emailScheduler.sendEmail();
