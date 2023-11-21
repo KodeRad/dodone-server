@@ -17,9 +17,6 @@ import java.util.List;
 public class TodoService {
 
 
-    @Value("${EMAIL_ADDRESS}")
-    private String emailAddress;
-
     private final TodoRepository
             todoRepository;
 
@@ -49,32 +46,5 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
 
-    public void sendEmail() throws MessagingException {
 
-        Date timeNow = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = sdf.format(timeNow);
-
-        List<Todo> todos = todoRepository.findAll();
-        for (Todo todo : todos) {
-
-            if (!todo.getDueDate().isEmpty() ) {
-
-                String time = todo.getDueDate();
-                LocalDateTime originalDateTime = LocalDateTime.parse(time,
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-                // Subtract one hour
-                LocalDateTime oneHourBefore = originalDateTime.minusHours(1);
-
-                // Format the result
-                String formattedResult = oneHourBefore.format(DateTimeFormatter
-                        .ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-                if (todo.getDueDate() != null && formattedResult.equals(formattedDate)) {
-                    EmailService.sendMail(emailAddress, todo);
-                }
-            }
-        }
-    }
 }

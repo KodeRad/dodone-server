@@ -2,6 +2,7 @@ package com.dodone.dodone.controller;
 
 import com.dodone.dodone.entity.Todo;
 import com.dodone.dodone.service.EmailService;
+import com.dodone.dodone.service.TodoEmailScheduler;
 import com.dodone.dodone.service.TodoService;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,13 @@ import java.util.Objects;
 public class TodoController {
     private final TodoService todoService;
     private final EmailService emailService;
+    private final TodoEmailScheduler emailScheduler;
     private final int sec = 1000;
 
     //TODO: CHANGE IT TO MINUTES AND IMPLEMENT FLAGS (ASK GOSIA)
     @Scheduled(fixedDelay = sec)
     public void sendEmailSpecificTime() throws MessagingException {
-        todoService.sendEmail();
+        emailScheduler.sendEmail();
     }
 
 

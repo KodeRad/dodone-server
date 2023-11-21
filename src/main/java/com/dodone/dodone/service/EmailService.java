@@ -6,12 +6,16 @@ import com.dodone.dodone.entity.Todo;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
 // TODO: FIX THE ERROR THROWS
 @Service
 public class EmailService {
+
+    @Value("${PASSWORD}")
+    private String password2;
 
     public static void sendMail(String recipient, Todo todo) throws MessagingException {
         System.out.println("Preparing the send an email");
