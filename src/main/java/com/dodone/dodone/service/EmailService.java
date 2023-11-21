@@ -14,8 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    @Value("${PASSWORD}")
-    private String password2;
+    private static String password2;
+
+    @Value("${EMAIL_PASSWORD}")
+    public void setPassword2(String password2) {
+        EmailService.password2 = password2;
+    }
 
     public static void sendMail(String recipient, Todo todo) throws MessagingException {
         System.out.println("Preparing the send an email");
@@ -28,12 +32,12 @@ public class EmailService {
 
         String myAccEmail = "dodone.enterprise@gmail.com";
         // TODO: HIDE YOUR PASSWORD SOMEHOW
-        String password = "looj einb emgw zkhh";
+
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccEmail, password);
+                return new PasswordAuthentication(myAccEmail, password2);
             }
         });
 

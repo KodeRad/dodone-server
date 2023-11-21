@@ -14,32 +14,36 @@ import java.time.LocalDateTime;
 @ControllerAdvice()
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+
     // Handles specific exceptions thrown by the controller
-    // 1. Choose exception to handle (SQLIntegrityConstraintViolationException)
-    @ExceptionHandler(ExceptionSQLIntegrityConstraintViolation.class)
+    // 1. Choose exception to handle (ExceptionNoSuchElement)
+    @ExceptionHandler(value = ExceptionNoSuchElement.class)
     // 2. Create method signature which returns response entity (params not required)
-
-    public ResponseEntity<ErrorResponse> handleSqlIntegrityException
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException
     () {
-
         // 3. Create error response that is returns when error occur
         ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND,
-                "Attempt to insert or update datain a database " +
-                        "violates database's defined integrity constraint.",
-                LocalDateTime.now());
+                "No such element found", LocalDateTime.now() );
 
         // 4. Return ResponseEntity with response params
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @ExceptionHandler(value = ExceptionNoSuchElement.class)
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException
-            () {
+
+    @ExceptionHandler(ExceptionSQLIntegrityConstraintViolation.class)
+
+    public ResponseEntity<ErrorResponse> handleSqlIntegrityException
+    () {
+
         ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND,
-                "No such element found", LocalDateTime.now() );
+                "Attempt to insert or update datain a database " +
+                        "violates database's defined integrity constraint.",
+                LocalDateTime.now());
 
         return new ResponseEntity<>(response, response.getStatus());
     }
+
+
 
     @ExceptionHandler(value = IOException.class)
     public ResponseEntity<ErrorResponse> handleIOException
