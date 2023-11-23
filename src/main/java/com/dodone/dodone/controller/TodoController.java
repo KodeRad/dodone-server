@@ -46,7 +46,6 @@ public class TodoController {
     @PostMapping("/add")
     public ResponseEntity<Todo>
     addTodo(@RequestBody Todo todo) {
-        System.out.println(todo);
         Todo savedTodo = todoService.save(todo);
         System.out.println(savedTodo);
 
@@ -71,8 +70,7 @@ public class TodoController {
         Todo todo = todoService.getByID(id);
 
 
-        // TODO: MOVE TO LOGIC TO THE CONTROLLER
-        if (todo != null && todo.getId() != null) {
+        if (todo != null ) {
             // 2. We set the new values from a query
             todo.setName(updatedTodo.getName());
             todo.setCreatedDate(updatedTodo.getCreatedDate());
@@ -106,10 +104,6 @@ public class TodoController {
 
             if (updatedTodo.getDueDate() != null) {
                 todo.setDueDate(updatedTodo.getDueDate());
-            }
-
-            if (updatedTodo.getCreatedDate() != null) {
-                todo.setCreatedDate(updatedTodo.getCreatedDate());
             }
 
             todo.setPriority(updatedTodo.isPriority());
