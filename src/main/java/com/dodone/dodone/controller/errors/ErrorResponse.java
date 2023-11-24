@@ -1,11 +1,10 @@
 package com.dodone.dodone.controller.errors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

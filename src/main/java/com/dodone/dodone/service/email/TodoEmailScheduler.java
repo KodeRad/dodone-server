@@ -1,6 +1,7 @@
-package com.dodone.dodone.service;
+package com.dodone.dodone.service.email;
 
 import com.dodone.dodone.entity.Todo;
+import com.dodone.dodone.service.TodoService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -11,8 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-//import javax.mail.MessagingException;
 
 @Service
 public class TodoEmailScheduler {
