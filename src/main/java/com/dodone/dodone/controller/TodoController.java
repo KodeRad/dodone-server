@@ -43,29 +43,6 @@ public class TodoController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Todo>
-    update(@PathVariable("id") Long id,
-           @RequestBody Todo updatedTodo) {
-        Todo todo = todoService.getByID(id);
-
-        if (todo != null ) {
-            todo.setName(updatedTodo.getName());
-            todo.setCreatedDate(updatedTodo.getCreatedDate());
-            todo.setDueDate(updatedTodo.getDueDate());
-            todo.setPriority(updatedTodo.isPriority());
-            todo.setDone(updatedTodo.isDone());
-
-            todoService.save(todo);
-
-            return ResponseEntity.status(HttpStatus.
-                    CREATED).body(todo);
-        } else {
-            return ResponseEntity.status(HttpStatus.
-                    INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @PatchMapping("/{id}")
     public ResponseEntity<Todo>
     partUpdate(@PathVariable("id") Long id,
