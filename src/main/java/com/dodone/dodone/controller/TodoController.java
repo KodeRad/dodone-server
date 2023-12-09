@@ -8,10 +8,10 @@ import com.dodone.dodone.entity.Todo;
 import lombok.AllArgsConstructor;
 import java.util.List;
 
-@AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173/")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/todos")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class TodoController {
     private final TodoService todoService;
 
