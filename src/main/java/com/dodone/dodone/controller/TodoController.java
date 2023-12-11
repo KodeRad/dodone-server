@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/todos")
 @CrossOrigin(origins = "http://localhost:5173/")
 public class TodoController {
-    private final TodoService todoService;
 
+    private final TodoService todoService;
 
     @GetMapping("")
     public List<Todo> getAll() {
@@ -23,7 +23,6 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public Todo getTodo(@PathVariable("id") Long id) {
-
         return todoService.getByID(id);
     }
 
@@ -32,7 +31,7 @@ public class TodoController {
     addTodo(@RequestBody Todo todo) {
         Todo savedTodo = todoService.save(todo);
 
-        if (savedTodo != null && savedTodo.getId() != null) {
+        if (savedTodo != null) {
             return ResponseEntity
                     .status(HttpStatus
                             .CREATED).body(savedTodo);
@@ -48,33 +47,21 @@ public class TodoController {
     partUpdate(@PathVariable("id") Long id,
                @RequestBody Todo updatedTodo) {
 
-        Todo todo = todoService.getByID(id);
+        Todo todo = todoService.update(id, updatedTodo);
 
-        if (todo != null && todo.getId() != null) {
-            if (updatedTodo.getName() != null) {
-                todo.setName(updatedTodo.getName());
-            }
-
-            if (updatedTodo.getDueDate() != null) {
-                todo.setDueDate(updatedTodo.getDueDate());
-            }
-
-            todo.setPriority(updatedTodo.isPriority());
-            todo.setDone(updatedTodo.isDone());
-
-            todoService.save(todo);
-
+        if (todo != null) {
             return ResponseEntity.status(HttpStatus
                     .CREATED).body(todo);
         } else {
             return ResponseEntity.status(HttpStatus
-                    .INTERNAL_SERVER_ERROR).build();
+                    .BAD_REQUEST).build();
         }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         todoService.delete(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

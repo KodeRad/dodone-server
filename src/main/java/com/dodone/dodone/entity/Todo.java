@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+@Data
 @Entity
 @NoArgsConstructor
-@Data
 public class Todo {
 
     @Id

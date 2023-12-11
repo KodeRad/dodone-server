@@ -16,5 +16,4 @@ public class ErrorResponse {
             pattern = "yyyy/MM/dd hh:mm:ss")
     private LocalDateTime timeStamp;
 
-
 }
